@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
                 ),
                 const PopupMenuItem<int>(
                   value: 1,
-                  child: Text('Finalizar Terminal'),
+                  child: Text('Finalizar o Terminal'),
                 ),
               ];
             },
