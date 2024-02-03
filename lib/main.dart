@@ -9,6 +9,8 @@ import 'package:fe_lab_clinicas_self_service/src/pages/splash_page/splash_page.d
 import 'package:flutter/material.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 
+import 'src/modules/self_service/self_service_module.dart';
+
 void main() {
   runZonedGuarded(() {
     runApp(const LabClinicasSelfService());
@@ -33,7 +35,7 @@ class LabClinicasSelfService extends StatelessWidget {
           path: '/',
         )
       ],
-      modules: [AuthModule(), HomeModule()],
+      modules: [AuthModule(), HomeModule(), SelfServiceModule()],
     );
   }
 }
