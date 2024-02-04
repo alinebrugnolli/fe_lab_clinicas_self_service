@@ -30,7 +30,7 @@ class _SelfServicePageState extends State<SelfServicePage>
           case FormSteps.whoIAm:
             baseRoute += 'whoIAm';
           case FormSteps.findPatient:
-            baseRoute += 'findPatient';
+            baseRoute += 'find-patient';
           case FormSteps.patient:
             baseRoute += 'patient';
           case FormSteps.documents:
