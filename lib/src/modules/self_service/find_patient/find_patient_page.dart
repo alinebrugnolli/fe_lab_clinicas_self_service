@@ -51,11 +51,7 @@ class _FindPatientPageState extends State<FindPatientPage>
               ];
             },
             onSelected: (value) async {
-              if (value == 1) {
-                final nav = Navigator.of(context);
-                await SharedPreferences.getInstance().then((sp) => sp.clear());
-                nav.pushNamedAndRemoveUntil('/', (route) => false);
-              }
+              Injector.get<SelfServiceController>().restartProcess();
             },
           ),
         ],
