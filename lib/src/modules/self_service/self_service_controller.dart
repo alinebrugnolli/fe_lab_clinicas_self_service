@@ -18,6 +18,8 @@ class SelfServiceController with MessageStateMixin {
     FormSteps.none,
   );
   var _model = const SelfServiceModel();
+
+  SelfServiceModel get model => _model;
   FormSteps get step => _step();
 
   void startProcess() {
@@ -27,16 +29,16 @@ class SelfServiceController with MessageStateMixin {
   void setWhoIAmDataStepAndNext(String name, String lastName) {
     _model = _model.copyWith(
       name: () => name,
-      lastName: () => lastName,      
+      lastName: () => lastName,
     );
-    _step.forceUpdate(FormSteps.findPatient);    
-  }  
+    _step.forceUpdate(FormSteps.findPatient);
+  }
 
   void clearForm() {
     _model = _model.clear();
   }
 
-  void goToFormPatient(PatientModel? patient){
+  void goToFormPatient(PatientModel? patient) {
     _model = _model.copyWith(patient: () => patient);
     _step.forceUpdate(FormSteps.patient);
   }
@@ -44,5 +46,10 @@ class SelfServiceController with MessageStateMixin {
   void restartProcess() {
     _step.forceUpdate(FormSteps.restart);
     clearForm();
+  }
+
+  void updatePatientAndGoDocument(PatientModel? patient) {
+    _model = _model.copyWith(patient: () => patient);
+    _step.forceUpdate(FormSteps.documents);
   }
 }
