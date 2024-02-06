@@ -142,7 +142,9 @@ class _DocumentsPageState extends State<DocumentsPage> with MessageViewMixin {
                             backgroundColor: LabClinicasTheme.orangeColor,
                             fixedSize: const Size.fromHeight(48),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/self-service/done');
+                          },
                           child: const Text('FINALIZAR'),
                         ),
                       ),
