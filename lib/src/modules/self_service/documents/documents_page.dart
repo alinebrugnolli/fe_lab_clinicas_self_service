@@ -1,14 +1,36 @@
 import 'package:fe_lab_clinicas_core/fe_lab_clinicas_core.dart';
+import 'package:fe_lab_clinicas_self_service/src/model/self_service_model.dart';
 import 'package:fe_lab_clinicas_self_service/src/modules/self_service/documents/widgets/document_box_widget.dart';
+import 'package:fe_lab_clinicas_self_service/src/modules/self_service/self_service_controller.dart';
 import 'package:fe_lab_clinicas_self_service/src/modules/self_service/widget/lab_clinicas_self_service_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_getit/flutter_getit.dart';
 
-class DocumentsPage extends StatelessWidget {
+class DocumentsPage extends StatefulWidget {
   const DocumentsPage({super.key});
+
+  @override
+  State<DocumentsPage> createState() => _DocumentsPageState();
+}
+
+class _DocumentsPageState extends State<DocumentsPage> with MessageViewMixin {
+  final selfServiceController = Injector.get<SelfServiceController>();
+
+  @override
+  void initState() {
+    messageListener(selfServiceController);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final sizeOf = MediaQuery.sizeOf(context);
+    final documents = selfServiceController.model.documents;
+    final totalHealthInsureceCard =
+        documents?[DocumentType.healthInsureceCard]?.length ?? 0;
+    final totalMedicalOrder =
+        documents?[DocumentType.medicalOrder]?.length ?? 0;
+
     return Scaffold(
       appBar: LabClinicasSelfServiceAppBar(),
       body: Align(
@@ -51,19 +73,41 @@ class DocumentsPage extends StatelessWidget {
                   child: Row(
                     children: [
                       DocumentBoxWidget(
-                        uploaded: true,
+                        uploaded: totalHealthInsureceCard > 0,
                         icon: Image.asset('assets/images/id_card.png'),
                         label: 'CARTEIRINHA',
-                        totalFiles: 1,
+                        totalFiles: totalHealthInsureceCard,
+                        onTap: () async {
+                          final filePath = await Navigator.of(context)
+                              .pushNamed('/self-service/documents/scan');
+                          if (filePath != null && filePath != '') {
+                            selfServiceController.registerDocument(
+                              DocumentType.healthInsureceCard,
+                              filePath.toString(),
+                            );
+                            setState(() {});
+                          }
+                        },
                       ),
                       const SizedBox(
                         width: 32,
                       ),
                       DocumentBoxWidget(
-                        uploaded: false,
+                        uploaded: totalMedicalOrder > 0,
                         icon: Image.asset('assets/images/document.png'),
                         label: 'PEDIDO MÉDICO',
-                        totalFiles: 4,
+                        totalFiles: totalMedicalOrder,
+                        onTap: () async {
+                          final filePath = await Navigator.of(context)
+                              .pushNamed('/self-service/documents/scan');
+                          if (filePath != null && filePath != '') {
+                            selfServiceController.registerDocument(
+                              DocumentType.medicalOrder,
+                              filePath.toString(),
+                            );
+                            setState(() {});
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -71,33 +115,38 @@ class DocumentsPage extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.red,
-                          side: const BorderSide(color: Colors.red),
-                          fixedSize: const Size.fromHeight(48),
+                Visibility(
+                  visible: totalMedicalOrder > 0 && totalHealthInsureceCard > 0,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            side: const BorderSide(color: Colors.red),
+                            fixedSize: const Size.fromHeight(48),
+                          ),
+                          onPressed: () {
+                            selfServiceController.clearDocuments();
+                          },
+                          child: const Text('REMOVER TODAS'),
                         ),
-                        onPressed: () {},
-                        child: const Text('REMOVER TODAS'),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: LabClinicasTheme.orangeColor,
-                          fixedSize: const Size.fromHeight(48),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: LabClinicasTheme.orangeColor,
+                            fixedSize: const Size.fromHeight(48),
+                          ),
+                          onPressed: () {},
+                          child: const Text('FINALIZAR'),
                         ),
-                        onPressed: () {},
-                        child: const Text('FINALIZAR'),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
