@@ -6,7 +6,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeof = MediaQuery.sizeOf(context);
+    final sizeOf = MediaQuery.sizeOf(context);
 
     return Scaffold(
       appBar: LabClinicasAppBar(
@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.only(top: 112),
           padding: const EdgeInsets.all(40),
-          width: sizeof.width * .8,
+          width: sizeOf.width * .8,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
                 height: 32,
               ),
               SizedBox(
-                width: sizeof.width * .8,
+                width: sizeOf.width * .8,
                 height: 48,
                 child: ElevatedButton(
                   onPressed: () {
